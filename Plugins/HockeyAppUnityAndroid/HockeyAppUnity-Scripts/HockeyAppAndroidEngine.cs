@@ -44,21 +44,15 @@ public class HockeyAppAndroidEngine {
 
 	protected const int MAX_CHARS = 199800;
 	protected const string LOG_FILE_DIR = "/logs/";
-	private readonly MonoBehaviour monoBehaviour;
 	private readonly string appID = "your-hockey-app-id";
 	private readonly string packageID = "your-package-identifier";
 	private readonly string serverURL = "your-custom-server-url";
-	private readonly bool autoUpload = false;
 	private readonly bool exceptionLogging = false;
-	private readonly bool updateManager = false;
-
+	
 	public HockeyAppAndroidEngine(MonoBehaviour monoBehaviour, string appID, string packageID, bool autoUpload, bool exceptionLogging, bool updateManager, string serverURL=null) {
-		this.monoBehaviour = monoBehaviour;
 		this.appID = appID;
 		this.packageID = packageID;
-		this.autoUpload = autoUpload;
 		this.exceptionLogging = exceptionLogging;
-		this.updateManager = updateManager;
 		this.serverURL = (serverURL != null) ? serverURL : "";
 
 		if(exceptionLogging == true  && IsConnected() == true)
