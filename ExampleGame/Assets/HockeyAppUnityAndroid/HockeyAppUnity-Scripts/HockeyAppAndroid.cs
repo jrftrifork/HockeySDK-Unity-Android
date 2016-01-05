@@ -85,14 +85,16 @@ public class HockeyAppAndroidEngine {
 	private readonly string packageID = "your-package-identifier";
 	private readonly string serverURL = "your-custom-server-url";
 	private readonly bool exceptionLogging = false;
-	
-	public HockeyAppAndroidEngine(MonoBehaviour monoBehaviour, string appID, string packageID, bool autoUpload, bool exceptionLogging, bool updateManager, string serverURL=null) {
+    private HockeyAppCrashManagerListener listener;
+
+    public HockeyAppAndroidEngine(MonoBehaviour monoBehaviour, string appID, string packageID, bool autoUpload, bool exceptionLogging, bool updateManager, string serverURL=null, HockeyAppCrashManagerListener listener = null) {
 		this.appID = appID;
 		this.packageID = packageID;
 		this.exceptionLogging = exceptionLogging;
 		this.serverURL = (serverURL != null) ? serverURL : "";
+        this.listener = listener;
 
-		if(exceptionLogging == true  && IsConnected() == true)
+        if(exceptionLogging == true  && IsConnected() == true)
 		{
 			List<string> logFileDirs = GetLogFiles();
 			if(logFileDirs.Count > 0)
@@ -264,7 +266,11 @@ public class HockeyAppAndroidEngine {
 		if(bytes != null)
 		{
 			form.AddBinaryData("log", bytes, log, "text/plain");
-		}
+    		if (listener != null && listener.GetUserID() != null)
+    		{
+                form.AddField("userID", listener.GetUserID());
+            }
+        }
 		
 		return form;
 	}
@@ -460,3 +466,7 @@ public class HockeyAppAndroidEngine {
 	}
 }
 
+public interface HockeyAppCrashManagerListener
+{
+    string GetUserID();
+}
